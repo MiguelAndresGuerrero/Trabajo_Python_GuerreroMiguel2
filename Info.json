@@ -1,0 +1,232 @@
+[
+    {
+        "id": 1,
+        "seccion": "entradas",
+        "productos": [
+            {
+                "id": 1,
+                "categoria": "entrada",
+                "nombre": "Empanadas Mini",
+                "precio": 9000
+            },
+            {
+                "id": 2,
+                "categoria": "entrada",
+                "nombre": "Papas Fritas",
+                "precio": 5000
+            },
+            {
+                "id": 3,
+                "categoria": "entrada",
+                "nombre": "Dedos de Queso",
+                "precio": 11000
+            },
+            {
+                "categoria": "entrada",
+                "nombre": "Tostada Francesa",
+                "precio": 10000
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "seccion": "Platos fuertes",
+        "productos": [
+            {
+                "categoria": "plato_fuerte",
+                "nombre": "Pasta Bolognesa",
+                "precio": 35000
+            },
+            {
+                "categoria": "plato_fuerte",
+                "nombre": "Hamburguesa",
+                "precio": 28000
+            },
+            {
+                "categoria": "plato_fuerte",
+                "nombre": "Pollo al Curry",
+                "precio": 30000
+            },
+            {
+                "categoria": "plato_fuerte",
+                "nombre": "Lechona",
+                "precio": 25000
+            },
+            {
+                "categoria": "plato_fuerte",
+                "nombre": "Arroz al Wok",
+                "precio": 20000
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "seccion": "Bebidas",
+        "productos": [
+            {
+                "categoria": "bebida",
+                "nombre": "Coca-Cola",
+                "precio": 3000
+            },
+            {
+                "categoria": "bebida",
+                "nombre": "Jugo Natural",
+                "precio": 5000
+            },
+            {
+                "categoria": "bebida",
+                "nombre": "Vino",
+                "precio": 8000
+            },
+            {
+                "categoria": "bebida",
+                "nombre": "Cerveza",
+                "precio": 3500
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "seccion": "Pagos",
+        "productos": [
+            {
+                "cliente": "Juan Perez",
+                "total": 47000,
+                "fecha_pago": "2024-06-15 12:34:56"
+            },
+            {
+                "cliente": "Maria Lopez",
+                "total": 38000,
+                "fecha_pago": "2024-06-16 14:20:30"
+            },
+            {
+                "cliente": "Ana Martinez",
+                "total": 38500,
+                "fecha_pago": "2024-06-17 16:45:10"
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "seccion": "Pedidos",
+        "cliente": "Juan Perez",
+        "productos": [
+            {
+                "categoria": "entrada",
+                "nombre": "Empanadas Mini",
+                "precio": 9000
+            },
+            {
+                "categoria": "plato_fuerte",
+                "nombre": "Pasta Bolognesa",
+                "precio": 35000
+            },
+            {
+                "categoria": "bebida",
+                "nombre": "Coca-Cola",
+                "precio": 3000
+            }
+        ],
+        "estado": "Pagado"
+    },
+    {
+        "id": 6,
+        "seccion": "Pedidos",
+        "cliente": "Maria Lopez",
+        "productos": [
+            {
+                "categoria": "entrada",
+                "nombre": "Papas Fritas",
+                "precio": 5000
+            },
+            {
+                "categoria": "plato_fuerte",
+                "nombre": "Hamburguesa",
+                "precio": 28000
+            },
+            {
+                "categoria": "bebida",
+                "nombre": "Jugo Natural",
+                "precio": 5000
+            }
+        ],
+        "estado": "preparacion"
+    },
+    {
+        "id": 7,
+        "seccion": "Pedidos",
+        "cliente": "Carlos Gomez",
+        "productos": [
+            {
+                "categoria": "entrada",
+                "nombre": "Dedos de Queso",
+                "precio": 11000
+            },
+            {
+                "categoria": "plato_fuerte",
+                "nombre": "Pollo al Curry",
+                "precio": 30000
+            },
+            {
+                "categoria": "bebida",
+                "nombre": "Vino",
+                "precio": 8000
+            }
+        ],
+        "estado": "Creado"
+    },
+    {
+        "id": 8,
+        "seccion": "Pedidos",
+        "cliente": "Carlos Gomez",
+        "productos": [
+            {
+                "categoria": "entrada",
+                "nombre": "Dedos de Queso",
+                "precio": 11000
+            },
+            {
+                "categoria": "plato_fuerte",
+                "nombre": "Pollo al Curry",
+                "precio": 30000
+            },
+            {
+                "categoria": "bebida",
+                "nombre": "Vino",
+                "precio": 8000
+            }
+        ],
+        "estado": "Creado"
+    },
+    {
+        "id": 9,
+        "seccion": "Pedidos",
+        "cliente": "Ana Martinez",
+        "productos": [
+            {
+                "categoria": "entrada",
+                "nombre": "Tostada Francesa",
+                "precio": 10000
+            },
+            {
+                "categoria": "plato_fuerte",
+                "nombre": "Lechona",
+                "precio": 25000
+            }
+        ],
+        "estado": "Servido"
+    },
+    {
+        "id": 10,
+        "seccion": "Pedidos",
+        "cliente": "Andres Gomez",
+        "productos": [
+            {
+                "categoria": "entrada",
+                "nombre": "Tostada Francesa",
+                "precio": 10000
+            }
+        ],
+        "estado": "Creado"
+    }
+]
