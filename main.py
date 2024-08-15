@@ -30,6 +30,7 @@ def registrar_venta(data):
 
     # Mostrar menú de secciones
     seccion_elegida = elegir_seccion(data)
+    
     if not seccion_elegida:
         print("Sección no válida")
         return
@@ -46,6 +47,7 @@ def registrar_venta(data):
         print(f"{i + 1}. {producto['nombre']} - Precio: {producto['precio']}")
     
     producto_id = int(input("Seleccione el ID del producto: ")) - 1
+
     if producto_id < 0 or producto_id >= len(productos_disponibles):
         print("Producto no válido")
         return
@@ -75,6 +77,7 @@ def registrar_venta(data):
 
 # Función para elegir una sección
 def elegir_seccion(data):
+
     print("==============================")
     print("      MENU DE SECCIONES       ")
     print("==============================")
@@ -85,10 +88,13 @@ def elegir_seccion(data):
 
     try:
         seccion_id = int(input("Seleccione la sección: ")) - 1
+
         if 0 <= seccion_id < len(secciones):
             return secciones[seccion_id]
+        
         else:
             print("Sección no válida")
+
     except ValueError:
         print("Debe ingresar un número válido")
     return None
@@ -103,6 +109,7 @@ def mostrar_pedido(data, cliente):
 
     for pedido in pedidos_cliente:
         print(f"Cliente: {cliente} | Estado: {pedido['estado']}")
+
         for producto in pedido['productos']:
             print(f"  - Producto: {producto['nombre']} | Precio: {producto['precio']} | Categoria: {producto['categoria']}")
 
@@ -118,6 +125,7 @@ def menu_cliente(data):
         print("4. Salir                      ")
         
         opcion = input("Seleccione una opción: ")
+
         if opcion == "1":
             mostrar_productos_por_seccion(data)
 
@@ -159,6 +167,7 @@ def menu_principal():
         print("2. Salir                      ")
         
         opcion = input("Seleccione una opción: ")
+
         if opcion == "1":
             menu_cliente(data)
 
