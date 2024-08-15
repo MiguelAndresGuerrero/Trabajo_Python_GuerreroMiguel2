@@ -238,5 +238,19 @@
             }
         ],
         "estado": "Creado"
+    },
+    {
+        "id": 7,
+        "seccion": "Pedidos",
+        "cliente": "Andres",
+        "productos": [
+            {
+                "categoria": "bebida",
+                "nombre": "Coca-Cola",
+                "precio": 3000,
+                "cantidad": 2
+            }
+        ],
+        "estado": "Creado"
     }
 ]
