@@ -1,186 +1,174 @@
 import json
 from datetime import datetime
 
-#Nomabre del usuario
-Name=input("Bienvenido, ingresa tu nombre: ")
-
-# Login de usuarios
-print("¿Cómo quieres ingresar?")
-print("""
-      =======================================
-                    MENU PRINCIPAL
-      =======================================
-        1. Cliente
-        2. Vendedor
-        3. salir
-    """)
-rango = int(input("¿Cuál es tu forma de acceso? "))
-
-# Conexión al archivo JSON general
-def abrir_archivo():
-    with open("Info.json", "r") as openfile:
-        return json.load(openfile)
-
-def guardar_archivo(data):
-    with open("Info.json", "w") as outfile:
-        json.dump(data, outfile, indent=4)
-
-# Guardar las ventas y compras en un archivo JSON separado
-def guardar_transacciones(transacciones):
-    with open("Transacciones.json", "w") as outfile:
-        json.dump(transacciones, outfile, indent=4)
-
-def cargar_transacciones():
+# Función para abrir archivo JSON
+def abrir_archivo(nombre_archivo="Info.json"):
     try:
-        with open("Transacciones.json", "r") as openfile:
+        with open(nombre_archivo, "r") as openfile:
             return json.load(openfile)
     except FileNotFoundError:
-        return []
+        return {}
 
-# Inicializar el archivo de transacciones
-transacciones = cargar_transacciones()
+# Función para guardar en archivo JSON
+def guardar_archivo(nombre_archivo="Info.json", data=None):
+    with open(nombre_archivo, "w") as outfile:
+        json.dump(data, outfile, indent=4)
 
-# Registro de ventas
+# Función para registrar venta
 def registrar_venta(data):
+    cliente = input("Ingrese el nombre del cliente: ")
+
+    # Validar si el cliente ya tiene un pedido activo
+    pedidos = [pedido for pedido in data if pedido['seccion'] == 'Pedidos']
+    pedidos_cliente = [p for p in pedidos if p['cliente'] == cliente and p['estado'] != 'Creado']
+    
+    if pedidos_cliente:
+        print(f"El cliente {cliente} ya tiene un pedido activo")
+        return
+    
     fecha_venta = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
-    # Seleccionar paciente
-    pacientes = data[3]["productos"]
 
-    for i, entradas in enumerate(pacientes):
-        print(f"{i+1}. {entradas['productos']}")
-    paciente_id = int(input("Seleccione el ID del paciente: ")) - 1
-    entradas = pacientes[paciente_id]
-    
-    # Seleccionar medicamento
-    medicamentos = data[0]["productos"]
+    # Mostrar menú de secciones
+    seccion_elegida = elegir_seccion(data)
+    if not seccion_elegida:
+        print("Sección no válida")
+        return
 
-    for i, medicamento in enumerate(medicamentos):
-        print(f"{i+1}. {medicamento['producto']} - Precio: {medicamento['precio']}")
-    medicamento_id = int(input("Seleccione el ID del medicamento: ")) - 1
-    medicamento = medicamentos[medicamento_id]
+    # Mostrar productos de la sección elegida
+    productos_disponibles = seccion_elegida.get("productos", [])
     
+    if not productos_disponibles:
+        print("No hay productos disponibles en esta sección")
+        return
+
+    print("Productos disponibles:")
+    for i, producto in enumerate(productos_disponibles):
+        print(f"{i + 1}. {producto['nombre']} - Precio: {producto['precio']}")
+    
+    producto_id = int(input("Seleccione el ID del producto: ")) - 1
+    if producto_id < 0 or producto_id >= len(productos_disponibles):
+        print("Producto no válido")
+        return
+
+    producto = productos_disponibles[producto_id]
+    cantidad = int(input("Ingrese la cantidad: "))
+
     # Registrar la venta
-    venta = {
-        "fecha": fecha_venta,
-        "medicamento": {
-            "nombre": ["producto"],
-            "categoria": ["categotia"],
-            "precio": ["precio"]
-        }
+    nuevo_pedido = {
+        "id": len(pedidos) + 1,
+        "seccion": "Pedidos",
+        "cliente": cliente,
+        "productos": [
+            {
+                "categoria": producto["categoria"],
+                "nombre": producto["nombre"],
+                "precio": producto["precio"],
+                "cantidad": cantidad
+            }
+        ],
+        "estado": "Creado"
     }
-    transacciones.append(venta)
-    guardar_archivo(data)
-    guardar_transacciones(transacciones)
-    print(f"Venta registrada con éxito el {fecha_venta}")
 
-# Registro de compras
-def registrar_compra(data):
-    fecha_compra = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
-    # Seleccionar Entradas
-    entradas= data[3]["productos"]
+    data.append(nuevo_pedido)
+    guardar_archivo("Info.json", data)
+    print(f"Venta registrada con éxito para {cliente} el {fecha_venta}")
 
-    for i, entradas in enumerate(entradas):
-        print(f"{i+1}. {entrada['Nombre']}")
-    entrada = int(input("Seleccione la entrada: ")) - 1
-    entradas = entradas[entrada]
-    
-    # Seleccionar medicamento
-    medicamentos = data[0]["productos"]
+# Función para elegir una sección
+def elegir_seccion(data):
+    print("==============================")
+    print("      MENU DE SECCIONES       ")
+    print("==============================")
+    secciones = [seccion for seccion in data if 'productos' in seccion]
 
-    for i, medicamento in enumerate(medicamentos):
-        print("-------------------------------------------------------------------------------------------------------------")
-        print(f"{i+1}. {medicamento['producto']} - Precio de compra: {medicamento['precio']}")
-        print("-------------------------------------------------------------------------------------------------------------")
-    medicamento_id = int(input("Seleccione el ID del medicamento: ")) - 1
-    medicamento = medicamentos[medicamento_id]
-    
-    # Registrar la cantidad comprada
-    cantidad = int(input("Ingrese la cantidad comprada: "))
-    
-    # Actualizar el stock
-    medicamento["stock"] = str(int(medicamento["stock"]) + cantidad)
-    
-    # Registrar la compra
-    compra = {
-        "fecha": fecha_compra,
-        "medicamento": {
-            "nombre": medicamento["producto"],
-            "cantidad": cantidad,
-            "precio_compra": medicamento["precio"]
-        }
-    }
-    transacciones.append(compra)
-    guardar_archivo(data)
-    guardar_transacciones(transacciones)
-    print(f"Compra registrada con éxito el {fecha_compra}")
+    for i, seccion in enumerate(secciones):
+        print(f"{i + 1}. {seccion['seccion']}")
 
-# Menú de productos
-def mostrar_productos(data):
-    print("===========================")
-    print("          Menu:            ")
-    print("===========================")
+    try:
+        seccion_id = int(input("Seleccione la sección: ")) - 1
+        if 0 <= seccion_id < len(secciones):
+            return secciones[seccion_id]
+        else:
+            print("Sección no válida")
+    except ValueError:
+        print("Debe ingresar un número válido")
+    return None
 
-    for productos in data[0]["productos"]:
-        print(f"{productos['categoria']}: {productos['nombre']} - Precio: {productos['precio']}")
+# Mostrar pedidos de un cliente
+def mostrar_pedido(data, cliente):
+    pedidos_cliente = [pedido for pedido in data if pedido['seccion'] == 'Pedidos' and pedido['cliente'] == cliente]
+    
+    if not pedidos_cliente:
+        print(f"No hay pedidos registrados para {cliente}")
+        return
+
+    for pedido in pedidos_cliente:
+        print(f"Cliente: {cliente} | Estado: {pedido['estado']}")
+        for producto in pedido['productos']:
+            print(f"  - Producto: {producto['nombre']} | Precio: {producto['precio']} | Categoria: {producto['categoria']}")
 
 # Menú de cliente
 def menu_cliente(data):
-
     while True:
-        print("============================")
-        print("            MENU            ")
-        print("============================")
-        print("1. Ver el Menu ")
-        print("2. Comprar producto ")
-        print("3. Salir ")
-        opcion = input("Seleccione una opción: ")
+        print("==============================")
+        print("         Menú Cliente         ")
+        print("==============================")
+        print("1. Ver productos por sección  ")
+        print("2. Comprar Producto           ")
+        print("3. Ver mis pedidos            ")
+        print("4. Salir                      ")
         
+        opcion = input("Seleccione una opción: ")
         if opcion == "1":
-            mostrar_productos(data)
-                
+            mostrar_productos_por_seccion(data)
+
         elif opcion == "2":
             registrar_venta(data)
-                
+
         elif opcion == "3":
-            print("Gracias por usar el programa")
+            cliente = input("Ingrese su nombre para ver sus pedidos: ")
+            mostrar_pedido(data, cliente)
+
+        elif opcion == "4":
             break
 
         else:
-            print("Opción inválida")
+            print("Opción inválida.")
 
-# Menú de moderador
-def menu_moderador(data):
+# Mostrar productos por sección
+def mostrar_productos_por_seccion(data):
+    seccion = elegir_seccion(data)
+
+    if seccion:
+        print(f"===== Productos de {seccion['seccion']} =====")
+
+        for  producto in seccion["productos"]:
+            print(f"{producto['nombre']} - Precio: {producto['precio']}")
+    
+    else:
+        print("Sección no válida")
+
+# Menú principal
+def menu_principal():
+    data = abrir_archivo("Info.json")
 
     while True:
-        print("=============================")
-        print("    BIENVENIDO VENDEDOR      ")
-        print("=============================")
-        print("1. Revisar productos")
-        print("2. Revisar compras")
-        print("3. Salir")
+        print("==============================")
+        print("        MENÚ PRINCIPAL        ")
+        print("==============================")
+        print("1. Cliente                    ")
+        print("2. Salir                      ")
+        
         opcion = input("Seleccione una opción: ")
-        
         if opcion == "1":
-            mostrar_productos(data)
-                
+            menu_cliente(data)
+
         elif opcion == "2":
-            registrar_compra(data)
-                
-        elif opcion == "3":
-            print("Gracias por usar el programa, Hasta la proxima :D")
             break
-        
+
         else:
-            print("Opción inválida, Selecciona una valida")
+            print("Opción no válida.")
 
-# Cargar datos
-data = abrir_archivo()
-
-if rango == 1:
-    menu_cliente(data)
-elif rango:
-    print("opcion no valida")
+if __name__ == "__main__":
+    menu_principal()
 
 #Creado por Miguel Guerrero C.C 1090381839
